@@ -1,0 +1,18 @@
+How to set up the environment and run the game:
+*assuming that you have python installed on your computer already*
+
+On Mac:
+
+1.  place the "set" folder on your desktop
+2.  Open up a terminal window
+    -> this can be done by clicking on the "spotlight" and searching "terminal"
+3.  type "cd Desktop" and click enter
+4.  type "cd set" and click enter
+5.  type "cd bin" and click enter
+6.  type "source activate" and click enter
+7.  type "cd .." and click enter
+8.  type "cd src" and click enter
+9.  Your environment is now set up!
+10. Now, using the same terminal window (do not close it), type "python main.py"
+    and click enter to run the game
+11. You can now play the game!

@@ -110,13 +110,22 @@ def display_cards(displayed_cards, image_list, surface, displayed_images):
         upper_left_x = 40
         for j in range(3):
 
+<<<<<<< HEAD
             displayed_cards[current_card] = displayed_cards[current_card]._replace(x = upper_left_x)
             displayed_cards[current_card] = displayed_cards[current_card]._replace(y = upper_left_y)
+=======
+            # right HERE
+            displayed_cards[current_card] = displayed_cards[current_card]._replace(x = upper_left_x)
+            displayed_cards[current_card] = displayed_cards[current_card]._replace(y = upper_left_y)
+            # displayed_cards[current_card] = displayed_cards[current_card]._replace(width = image_list[displayed_cards[current_card].position.get_width())
+            # displayed_cards[current_card] = displayed_cards[current_card]._replace(height = image_list[displayed_cards[current_card].position.get_height())
+>>>>>>> 15c3f937b41cd6eec21301a98617babf2fd2f621
 
             print('testing here ', image_list[displayed_cards[current_card].position])
             current_rect = surface.blit(image_list[displayed_cards[current_card].position], (upper_left_x, upper_left_y))
             displayed_images[displayed_cards[current_card]] = current_rect
 
+<<<<<<< HEAD
 
 
             upper_left_x += 230
@@ -130,12 +139,44 @@ def find_index_of_card(card, displayed_cards):
         if(card == displayed_cards[i]):
             return i;
 
+=======
+            # displayed_cards[current_card] = displayed_cards[current_card]._replace(width = current_rect.width)
+            # displayed_cards[current_card] = displayed_cards[current_card]._replace(height = current_rect.height)
+
+            # dict_of_displayed_cards[current_rect] = displayed_cards[current_card]
+
+
+
+
+            upper_left_x += 230
+            current_card += 1
+        upper_left_y += 149
+>>>>>>> 15c3f937b41cd6eec21301a98617babf2fd2f621
 
 def run():
     total_score = 0;
 
     pygame.init()
 
+<<<<<<< HEAD
+=======
+    # clicked_image = pygame.image.load('/Users/adifaintuch/Desktop/set/src/clicked.png')
+    #
+    # rect_1 = pygame.Rect(0, 0, 230, 149)
+    # rect_2 = pygame.Rect(250, 20, 230, 149)
+    # rect_3 = pygame.Rect(480, 20, 230, 149)
+    # rect_4 = pygame.Rect(20, 169, 230, 149)
+    # rect_5 = pygame.Rect(250, 169, 230, 149)
+    # rect_6 = pygame.Rect(480, 169, 230, 149)
+    # rect_7 = pygame.Rect(20, 318, 230, 149)
+    # rect_8 = pygame.Rect(250, 318, 230, 149)
+    # rect_9 = pygame.Rect(480, 318, 230, 149)
+    # rect_10 = pygame.Rect(20, 467, 230, 149)
+    # rect_11 = pygame.Rect(250, 467, 230, 149)
+    # rect_12 = pygame.Rect(480, 467, 230, 149)
+
+
+>>>>>>> 15c3f937b41cd6eec21301a98617babf2fd2f621
     list_of_rect = []
 
     #first item is the card number (0-11),
@@ -154,7 +195,10 @@ def run():
     deck = model.create_deck()
     shuffle(deck)
 
+<<<<<<< HEAD
     #displayed_cards is a list of card objects
+=======
+>>>>>>> 15c3f937b41cd6eec21301a98617babf2fd2f621
     displayed_cards = model.create_initial_twelve_cards(deck)
     model.remove_used_cards_from_deck(deck, displayed_cards)
 
@@ -178,6 +222,7 @@ def run():
 #currently, the problem is that the old cards are still on the screen
 #I should just reinstantiate the entire screen
 
+<<<<<<< HEAD
     clicks = 0
 
     set_of_removed_cards = set()
@@ -185,10 +230,18 @@ def run():
     while running:
         for event in pygame.event.get():
             if(clicks < 3):
+=======
+
+    while running:
+        for event in pygame.event.get():
+            if(len(clicked_images) < 3):
+                print("len is less than 3\n")
+>>>>>>> 15c3f937b41cd6eec21301a98617babf2fd2f621
                 if event.type == pygame.QUIT:
                     running = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     pos = pygame.mouse.get_pos()
+<<<<<<< HEAD
                     clicks += 1
                     for key, value in displayed_images.items():
                         if value.collidepoint(pos):
@@ -197,6 +250,14 @@ def run():
                                 make_image_clicked(key, value, surface, image_list, displayed_cards)
             else:
                 clicks = 0
+=======
+                    for key, value in displayed_images.items():
+                        if value.collidepoint(pos):
+                            clicked_images[key] = value
+                            make_image_clicked(key, value, surface, image_list, displayed_cards)
+            else:
+                print("len is more than 3\n")
+>>>>>>> 15c3f937b41cd6eec21301a98617babf2fd2f621
                 for item in clicked_images:
                     print("item is: ", item, "/n")
                 is_a_set = model.check_for_set(clicked_images)
@@ -209,6 +270,7 @@ def run():
                     total_score += 1;
                     for fgh in displayed_cards:
                         print("displayed cards ", fgh, "\n")
+<<<<<<< HEAD
                     list_of_index = []
                     for card in clicked_images:
                         print("card is ", card, "\n")
@@ -221,6 +283,16 @@ def run():
 
                     clicked_images = defaultdict()
                     model.add_three_new_cards(deck, displayed_cards, list_of_index)
+=======
+                    for card in clicked_images:
+                        print("card is ", card, "\n")
+                        displayed_cards.remove(card)
+                        displayed_images.pop(card)
+
+                    clicked_images = defaultdict()
+                    model.add_three_new_cards(deck, displayed_cards, displayed_images)
+                    #print("2total num of cards is ", len(displayed_cards))
+>>>>>>> 15c3f937b41cd6eec21301a98617babf2fd2f621
                     display_cards(displayed_cards, image_list, surface, displayed_images)
                 else:
                     clicked_images = defaultdict()

@@ -34,10 +34,17 @@ def create_initial_twelve_cards(deck):
 		used_cards.append(deck[i])
 	return used_cards
 
+<<<<<<< HEAD
 def add_three_new_cards(deck, displayed_cards, list_of_index):
 	'''adds 3 new cards to the displayed_cards list'''
 	for i in range(3):
 		displayed_cards[list_of_index[i]] = deck[i]
+=======
+def add_three_new_cards(deck, displayed_cards):
+	'''adds 3 new cards to the displayed_cards list'''
+	for i in range(3):
+		displayed_cards.append(deck[i])
+>>>>>>> 15c3f937b41cd6eec21301a98617babf2fd2f621
 
 def remove_used_cards_from_deck(deck, used_cards):
 	'''removed the used cards from the deck'''
