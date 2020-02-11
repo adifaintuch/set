@@ -46,19 +46,12 @@
 # 		shows the number of sets you currently have, beginning with zero)
 # '''
 
-
-
-#ok I need to make a dictionary, the key will be position (ex: 1, 2, etc..)
-#and the value will be the card
-
 import pygame
 from random import shuffle
 import model
 from collections import defaultdict
 
 clicked_image = pygame.image.load('/Users/adifaintuch/Desktop/set/src/clicked.png')
-
-
 
 def get_card_num(card):
     card_num = 0
@@ -86,17 +79,9 @@ def make_image_clicked(image_key, image_value, surface, image_list, displayed_ca
     new_y = image_value.y - 5
     new_width = image_value.width + 10
     new_height = image_value.height + 10
-    print("old x: ", image_value.x, " new x: ", new_x)
-    print("old y: ", image_value.y, " new y: ", new_y)
-    print("old width: ", image_value.width, " new width: ", new_width)
-    print("old height: ", image_value.height, " new height: ", new_height)
     new_rect = pygame.Rect(new_x, new_y, new_width, new_height)
 
     pygame.draw.rect(surface, (255, 242, 56), new_rect)
-    # surface.blit(pygame.image.load('/Users/adifaintuch/Desktop/set/src/clicked.png'), (new_x, new_y), new_rect)
-    # print()
-    # print("the image is ", image_key.position, image_list[image_key.position])
-    # #surface.blit(pygame.image.load(image_list[image_key.position]),image_value)
     surface.blit(pygame.image.load('/Users/adifaintuch/Desktop/set/src/card' + str(image_key.position + 1) + '.png'), image_value)
 
 def display_cards(displayed_cards, image_list, surface, displayed_images):
@@ -109,15 +94,8 @@ def display_cards(displayed_cards, image_list, surface, displayed_images):
     for i in range(4):
         upper_left_x = 40
         for j in range(3):
-
-            # displayed_cards[current_card] = displayed_cards[current_card]._replace(x = upper_left_x)
-            # displayed_cards[current_card] = displayed_cards[current_card]._replace(y = upper_left_y)
-
-            print('testing here ', image_list[displayed_cards[current_card].position])
             current_rect = surface.blit(image_list[displayed_cards[current_card].position], (upper_left_x, upper_left_y))
             displayed_images[displayed_cards[current_card]] = current_rect
-
-
 
             upper_left_x += 230
             current_card += 1
@@ -130,9 +108,6 @@ def find_index_of_card(card, displayed_cards):
         if(card == displayed_cards[i]):
             return i;
 
-def print_deck(deck):
-    for card in deck:
-        print("card in deck: ", card)
 
 def run():
     total_score = 0;
@@ -155,15 +130,11 @@ def run():
     running = True
 
     deck = model.create_deck()
-    print_deck(deck)
     shuffle(deck)
 
     #displayed_cards is a list of card objects
     displayed_cards = model.create_initial_twelve_cards(deck)
     model.remove_used_cards_from_deck(deck, displayed_cards)
-    print("printing deck again\n")
-    print("\n")
-    print_deck(deck)
 
     image_list = []
 
@@ -179,14 +150,7 @@ def run():
 
     display_cards(displayed_cards, image_list, surface, displayed_images)
 
-    for i in displayed_images:
-        print("displayed images", i)
-
-#currently, the problem is that the old cards are still on the screen
-#I should just reinstantiate the entire screen
-
     clicks = 0
-
     set_of_removed_cards = set()
 
     while running:
@@ -205,38 +169,21 @@ def run():
                                     make_image_clicked(key, value, surface, image_list, displayed_cards)
             else:
                 clicks = 0
-                for item in clicked_images:
-                    print("item is: ", item, "/n")
                 is_a_set = model.check_for_set(clicked_images)
                 if(is_a_set):
-                    #print out "You got a set!" on the screen
-                    #remove those cards from the screen and from the deck
-                    #place new cards in their place
-                    #increase score by 1
                     print("is a set")
                     total_score += 1;
-                    for fgh in displayed_cards:
-                        print("displayed cards ", fgh, "\n")
                     list_of_index = []
                     for card in clicked_images:
-                        print("card is ", card, "\n")
-                        print("position is ", find_index_of_card(card, displayed_cards), "\n")
                         list_of_index.append(find_index_of_card(card, displayed_cards))
                         set_of_removed_cards.add(card)
-                        #displayed_cards.remove(card)
-                        #displayed_images.pop(card)
-
-
                     clicked_images = defaultdict()
                     model.add_three_new_cards(deck, displayed_cards, list_of_index)
                     display_cards(displayed_cards, image_list, surface, displayed_images)
                 else:
-                    clicked_images = defaultdict()
-                    print("len of clicked images ", len(clicked_images))
-                    display_cards(displayed_cards, image_list, surface, displayed_images)
-                    #print out "Not a set" on the screen
-                    #remove just the yellow highlights around the cards
                     print("is not a set")
+                    clicked_images = defaultdict()
+                    display_cards(displayed_cards, image_list, surface, displayed_images)
 
 
 

@@ -20,9 +20,7 @@ def create_deck():
 		for sh in shading:
 			for s in shapes:
 				for n in number:
-					print("new card is ", c, " ", s, " ", n, " ", sh, " ", card_pos)
 					new_card = Card(c, s, n, sh, card_pos)
-					#new_card = Card(c, s, n, sh, 0, 0)
 					deck.append(new_card)
 					card_pos += 1
 
