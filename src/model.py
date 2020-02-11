@@ -9,17 +9,18 @@ Card = namedtuple('Card', 'color, shape, number, shading, position')
 def create_deck():
 	'''creates the deck of cards and returns a list of card namedtuples'''
 	colors = ['red', 'green', 'purple']
-	shapes = ['diamond', 'squiggle', 'oval']
+	shapes = ['diamond', 'oval', 'squiggle']
 	number = [1, 2, 3]
-	shading = ['solid', 'striped', 'open']
+	shading = ['open', 'striped', 'solid']
 
 	deck = []
 
 	card_pos = 0
 	for c in colors:
-		for s in shapes:
-			for n in number:
-				for sh in shading:
+		for sh in shading:
+			for s in shapes:
+				for n in number:
+					print("new card is ", c, " ", s, " ", n, " ", sh, " ", card_pos)
 					new_card = Card(c, s, n, sh, card_pos)
 					#new_card = Card(c, s, n, sh, 0, 0)
 					deck.append(new_card)
