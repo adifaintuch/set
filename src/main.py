@@ -46,6 +46,25 @@
 # 		shows the number of sets you currently have, beginning with zero)
 # '''
 
+
+'''
+Some thing that I need to do:
+-print score on the board of the game
+-make an algorithm that checks if there is a set on the board (and returns the 3
+cards that make up that set)
+-make a button that the user can click if they think there is no set
+    -if there is a set, let them know
+    -otherwise, add 3 new cards to the board
+-make a hint button in which the user can click and it will highlight one card
+that is part of the set
+    -will do it for each hint
+    -if they click on the highlighted card, it becomes a regularly clicked card
+
+-fill in the README
+    -good link: https://thehftguy.com/2016/10/24/heres-how-to-make-a-good-github-project-for-your-resume/
+
+'''
+
 import pygame
 from random import shuffle
 import model
@@ -108,6 +127,15 @@ def find_index_of_card(card, displayed_cards):
         if(card == displayed_cards[i]):
             return i;
 
+def print_set(displayed_cards):
+    '''prints a set solution'''
+    set = model.find_a_set(displayed_cards)
+    if(set == []):
+        print("set is empty")
+    else:
+        for card in set:
+            print("card in set: ", card, "\n")
+
 
 def run():
     total_score = 0;
@@ -153,9 +181,12 @@ def run():
     clicks = 0
     set_of_removed_cards = set()
 
+    solution_set = []
+
     while running:
         for event in pygame.event.get():
             if(clicks < 3):
+                solution_set = model.find_a_set(displayed_cards)
                 if event.type == pygame.QUIT:
                     running = False
                 if event.type == pygame.MOUSEBUTTONDOWN:

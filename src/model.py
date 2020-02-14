@@ -1,6 +1,7 @@
 #model.py
 from random import shuffle
 from collections import namedtuple
+from itertools import combinations
 
 Card = namedtuple('Card', 'color, shape, number, shading, position')
 
@@ -58,10 +59,6 @@ def remove_used_cards_from_deck(deck, used_cards):
 
 def check_for_set(card_dict):
 	'''checks to see if a dictionary of 3 cards is a set'''
- 	# all_diff_numbers = False;
- 	# all_diff_colors = False;
- 	# all_diff_shapes = False;
- 	# all_diff_shading = False;
 
 	numbers_set = set()
 	colors_set = set()
@@ -76,10 +73,29 @@ def check_for_set(card_dict):
 	if(len(numbers_set) == 2 or len(colors_set) == 2 or len(shapes_set) == 2 or len(shading_set) == 2):
 		 return False
 	return True
-	# if(len(colors_set) == 3):
-	# 	all_diff_colors = True
-	# if(len(shapes_set) == 3):
-	# 	all_diff_shapes = True
-	# if(len(shading_set) == 3):
-	# 	all_diff_shading = True
-	# return((all_diff_colors && all_diff_shapes && all_diff_shading) || (!all_diff_colors && !all_diff_shades && !all_diff_shading))
+
+def check_for_set_list(card_list):
+	'''checks to see if a list of 3 cards is a set'''
+	numbers_set = set()
+	colors_set = set()
+	shapes_set = set()
+	shading_set = set()
+
+	for k in card_list:
+		numbers_set.add(k.number)
+		colors_set.add(k.color)
+		shapes_set.add(k.shape)
+		shading_set.add(k.shading)
+	if(len(numbers_set) == 2 or len(colors_set) == 2 or len(shapes_set) == 2 or len(shading_set) == 2):
+		 return False
+	return True
+
+def find_a_set(displayed_cards):
+	'''returns a list with 3 cards that make a set (the first one found -
+	returns an empty list if no set is found'''
+
+	list_of_combinations = list(combinations(displayed_cards, 3))
+	for combo in list_of_combinations:
+		if(check_for_set_list(combo)):
+			return list(combo)
+	return []
