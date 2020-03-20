@@ -103,6 +103,16 @@ def make_image_clicked(image_key, image_value, surface, image_list, displayed_ca
     pygame.draw.rect(surface, (255, 242, 56), new_rect)
     surface.blit(pygame.image.load('/Users/adifaintuch/Desktop/set/src/card' + str(image_key.position + 1) + '.png'), image_value)
 
+def make_image_unclicked(image_key, image_value, surface, image_list, displayed_cards):
+    new_x = image_value.x - 5
+    new_y = image_value.y - 5
+    new_width = image_value.width + 10
+    new_height = image_value.height + 10
+    new_rect = pygame.Rect(new_x, new_y, new_width, new_height)
+
+    pygame.draw.rect(surface, (0, 0, 0), new_rect)
+    surface.blit(pygame.image.load('/Users/adifaintuch/Desktop/set/src/card' + str(image_key.position + 1) + '.png'), image_value)
+
 def display_cards(displayed_cards, image_list, surface, displayed_images, total_score):
     pygame.display.set_mode((700, 600))
 
@@ -210,6 +220,10 @@ def run():
                                     clicks += 1
                                     clicked_images[key] = value
                                     make_image_clicked(key, value, surface, image_list, displayed_cards)
+                                else:
+                                    clicks -= 1
+                                    make_image_unclicked(key, value, surface, image_list, displayed_cards)
+                                    del clicked_images[key]
             else:
                 clicks = 0
                 is_a_set = model.check_for_set(clicked_images)
