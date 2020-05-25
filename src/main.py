@@ -46,12 +46,12 @@
 # 		shows the number of sets you currently have, beginning with zero)
 # '''
 
-
 '''
 Some thing that I need to do:
--print score on the board of the game
--make an algorithm that checks if there is a set on the board (and returns the 3
-cards that make up that set)
+-make sure the game doesn't crash when you run out of cards in the sets
+    -simply continue until without adding cards
+        -can cover the cards with a black spot
+
 -make a button that the user can click if they think there is no set
     -if there is a set, let them know
     -otherwise, add 3 new cards to the board
@@ -125,6 +125,14 @@ def display_cards(displayed_cards, image_list, surface, displayed_images, total_
         for j in range(3):
             current_rect = surface.blit(image_list[displayed_cards[current_card].position], (upper_left_x, upper_left_y))
             displayed_images[displayed_cards[current_card]] = current_rect
+            print()
+            print("CURRENT CARD")
+            print(current_card)
+            print("IN DISPLAYED IMAGES")
+            print(displayed_cards[current_card])
+            print("CURRENT RECT")
+            print(current_rect)
+            print()
 
             upper_left_x += 230
             current_card += 1
@@ -179,6 +187,11 @@ def run():
     running = True
 
     deck = model.create_deck()
+    print("DECK")
+    for i in range(len(deck)):
+        print(deck[i])
+        print()
+    print()
     shuffle(deck)
 
     #displayed_cards is a list of card objects
@@ -204,11 +217,21 @@ def run():
 
     solution_set = []
 
+    print_solution_set_once = False
     while running:
         for event in pygame.event.get():
-            print_set(displayed_cards)
+            #print_set(displayed_cards)
             if(clicks < 3):
                 solution_set = model.find_a_set(displayed_cards)
+                if(print_solution_set_once == False):
+                    print_solution_set_once = True
+                    print("displayed_images")
+                    print(displayed_images)
+                    print("displayed cards")
+                    print(displayed_cards)
+                    print("solution set")
+                    print(solution_set)
+                    print("size of deck", len(deck))
                 if event.type == pygame.QUIT:
                     running = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -228,12 +251,19 @@ def run():
                 clicks = 0
                 is_a_set = model.check_for_set(clicked_images)
                 if(is_a_set):
+                    print_solution_set_once = False
                     print("is a set")
                     total_score += 1;
                     list_of_index = []
                     for card in clicked_images:
                         list_of_index.append(find_index_of_card(card, displayed_cards))
+                        print()
+                        print("INDEX IS:")
+                        print(find_index_of_card(card, displayed_cards))
+                        print()
                         set_of_removed_cards.add(card)
+                    print("removed cards")
+                    print(set_of_removed_cards)
                     clicked_images = defaultdict()
                     model.add_three_new_cards(deck, displayed_cards, list_of_index)
                     display_cards(displayed_cards, image_list, surface, displayed_images, total_score)

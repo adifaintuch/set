@@ -35,14 +35,6 @@ def create_initial_twelve_cards(deck):
 	return used_cards
 
 def add_three_new_cards(deck, displayed_cards, list_of_index):
-	'''adds 3 new cards to the displayed_cards list'''
-	for i in range(3):
-		print("testing0 ", i, "\n")
-		print("testing1 ", list_of_index[i], "\n")
-		print("testing2 ", deck[i], "\n")
-		displayed_cards[list_of_index[i]] = deck[i]
-
-def add_three_new_cards(deck, displayed_cards, list_of_index):
 	'''adds 3 new cards to the displayed_cards list and removes them from deck'''
 	for i in range(3):
 		displayed_cards[list_of_index[i]] = deck[i]
