@@ -1,55 +1,12 @@
-# #set.py
-# #Adi Faintuch
-# #7/15/19
-
-# '''
-# -I will use pygame
-# -I will have a model and a view
-
-# for the model:
-# 	-I will have a card namedtuple that has 4 attributes: color, shape,
-# 	number, and shading
-# 	-Each set will be a literal set object that contains 3 card
-# 	namedtuple objects
-# 	-I will have 2 lists: one for all of the cards in the "deck"
-# 	and the other being a list of the made set objects
-
-# 	-I will need an algorithm that checks to see if 3 cards make up a set
-# 	according to the following rules:
-# 	"Each card is unique in its four features: color (red, green
-# 	or purple), shape (diamond, squiggle or oval), number (1, 2
-# 	or 3 shapes), and shading (solid, striped or open). A set
-# 	consists of three cards on which each individual feature is either
-# 	all the same or all different on all three cards"
-# 	-if you think that there are no sets left you can click "no sets
-# 	possible" in which case an alogorithm will check if thats true and
-# 	if so it will add 3 additional cards.
-
-# 	-later I can also implement hints and algorithms to check if there
-# 	are any sets left in the cards displayed on the screen
-
-# for the view:
-# 	-I can later make it also multi player but for now I'm only
-# 	going to make it single player
-
-# 	for single player:
-# 		-I will have a screen with 12 cards objects displayed on it
-# 		-when you click on a card it gets a yellow highlight around it
-# 		-after you click on 3 cards you click the "set" button to make
-# 		it into a set
-# 		-if you click on a card again before clicking "set" it takes
-# 		away the yellow highlight around that card
-# 		-it does not let you click (highlight) more than 3 cards
-# 		at the same time
-# 		-everytime you make a set the cards dissapear, with 3 new cards
-# 		replacing them, and your "set deck" now displays 1 more set (it
-# 		shows the number of sets you currently have, beginning with zero)
-# '''
-
+'''
+set.py
+Adi Faintuch
+7/15/19
+'''
 '''
 Some thing that I need to do:
 -make sure the game doesn't crash when you run out of cards in the sets
-    -simply continue until without adding cards
+    -simply continue without adding cards
         -can cover the cards with a black spot
 
 -make a button that the user can click if they think there is no set
@@ -62,7 +19,6 @@ that is part of the set
 
 -fill in the README
     -good link: https://thehftguy.com/2016/10/24/heres-how-to-make-a-good-github-project-for-your-resume/
-
 '''
 
 import pygame
