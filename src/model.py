@@ -43,6 +43,11 @@ def add_three_new_cards(deck, displayed_cards, list_of_index):
 	# for j in range(3):
 	# 	deck.remove(displayed_cards[list_of_index[i]])
 
+def remove_three_cards(deck, displayed_cards, list_of_index):
+	'''removes 3 cards when there are no more cards left in the deck'''
+	for j in range(3):
+		deck.remove(displayed_cards[list_of_index[j]])
+
 def remove_used_cards_from_deck(deck, used_cards):
 	'''removed the used cards from the deck'''
 	for card in used_cards:

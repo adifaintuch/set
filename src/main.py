@@ -49,7 +49,6 @@ def get_card_num(card):
     return card_num
 
 def make_image_clicked(image_key, image_value, surface, image_list, displayed_cards):
-
     new_x = image_value.x - 5
     new_y = image_value.y - 5
     new_width = image_value.width + 10
@@ -119,6 +118,21 @@ def display_score(surface, total_score):
     text_rect = text.get_rect(center =(345, 580))
     surface.blit(text, text_rect)
 
+def display_end_score(surface, total_score):
+    '''displays the score at the end of the game'''
+    font = pygame.font.Font(None, 100)
+    to_print = "TOTAL SCORE: " + str(total_score)
+    text = font.render(to_print, True, [0, 0, 250])
+    text_rect = text.get_rect(center =(350, 500))
+    surface.blit(text, text_rect)
+
+def display_end_game(surface, total_score):
+    '''handles the end of the game display'''
+    pygame.display.set_mode((700, 600))
+    game_over_rect = pygame.Rect(-75,0,350,350)
+    surface.blit(pygame.image.load('/Users/adifaintuch/Desktop/set/src/gameover.jpg'), game_over_rect)
+    display_end_score(surface,total_score)
+
 def run():
     total_score = 0;
 
@@ -141,6 +155,7 @@ def run():
 
 
     running = True
+    waiting_for_end = False
 
     deck = model.create_deck()
     print("DECK")
@@ -176,6 +191,10 @@ def run():
     print_solution_set_once = False
     while running:
         for event in pygame.event.get():
+            if(len(deck) == 0 and len(solution_set) == 0):
+                display_end_game(surface, total_score)
+                running = False
+                waiting_for_end = True
             #print_set(displayed_cards)
             if(clicks < 3):
                 solution_set = model.find_a_set(displayed_cards)
@@ -190,6 +209,7 @@ def run():
                     print("size of deck", len(deck))
                 if event.type == pygame.QUIT:
                     running = False
+                    pygame.quit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     pos = pygame.mouse.get_pos()
                     for key, value in displayed_images.items():
@@ -213,15 +233,14 @@ def run():
                     list_of_index = []
                     for card in clicked_images:
                         list_of_index.append(find_index_of_card(card, displayed_cards))
-                        print()
-                        print("INDEX IS:")
-                        print(find_index_of_card(card, displayed_cards))
-                        print()
                         set_of_removed_cards.add(card)
                     print("removed cards")
                     print(set_of_removed_cards)
                     clicked_images = defaultdict()
-                    model.add_three_new_cards(deck, displayed_cards, list_of_index)
+                    if(len(deck) != 0):
+                        model.add_three_new_cards(deck, displayed_cards, list_of_index)
+                    #else:
+                        #model.remove_three_cards(deck, displayed_cards, list_of_index)
                     display_cards(displayed_cards, image_list, surface, displayed_images, total_score)
                 else:
                     print("is not a set")
@@ -232,6 +251,10 @@ def run():
 
         pygame.display.flip()
 
+        while waiting_for_end:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
 
     pygame.quit()
 
