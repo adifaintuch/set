@@ -56,7 +56,7 @@ def make_image_clicked(image_key, image_value, surface, image_list, displayed_ca
     new_rect = pygame.Rect(new_x, new_y, new_width, new_height)
 
     pygame.draw.rect(surface, (255, 242, 56), new_rect)
-    surface.blit(pygame.image.load('/Users/adifaintuch/Desktop/set/src/card' + str(image_key.position + 1) + '.png'), image_value)
+    surface.blit(image_key.image, image_value)
 
 def make_image_unclicked(image_key, image_value, surface, image_list, displayed_cards):
     new_x = image_value.x - 5
@@ -66,41 +66,53 @@ def make_image_unclicked(image_key, image_value, surface, image_list, displayed_
     new_rect = pygame.Rect(new_x, new_y, new_width, new_height)
 
     pygame.draw.rect(surface, (0, 0, 0), new_rect)
-    surface.blit(pygame.image.load('/Users/adifaintuch/Desktop/set/src/card' + str(image_key.position + 1) + '.png'), image_value)
+    surface.blit(image_key.image, image_value)
 
-def display_cards(displayed_cards, image_list, surface, displayed_images, total_score):
-    pygame.display.set_mode((700, 600))
+def create_initial_display_card_positions(displayed_cards):
+    '''created the initial displayed_cards positions'''
+    upper_left_x = 40 #plus 230 each time
+    upper_left_y = 30 #plus 149 every 3 cards
+
+def display_cards_initial(displayed_cards, image_list, surface, total_score):
+    #pygame.display.set_mode((700, 600))
+    pygame.display.set_mode((700, 750))
 
     upper_left_x = 40 #plus 230 each time
     upper_left_y = 30 #plus 149 every 3 cards
 
     current_card = 0
+
+    cards_to_display_list = list(displayed_cards.keys())
     for i in range(4):
         upper_left_x = 40
         for j in range(3):
-            current_rect = surface.blit(image_list[displayed_cards[current_card].position], (upper_left_x, upper_left_y))
-            displayed_images[displayed_cards[current_card]] = current_rect
-            print()
-            print("CURRENT CARD")
-            print(current_card)
-            print("IN DISPLAYED IMAGES")
-            print(displayed_cards[current_card])
-            print("CURRENT RECT")
-            print(current_rect)
-            print()
+            current_rect = surface.blit(cards_to_display_list[current_card].image, (upper_left_x, upper_left_y))
+            displayed_cards[cards_to_display_list[current_card]] = current_rect
 
             upper_left_x += 230
             current_card += 1
         upper_left_y += 149
 
     display_score(surface, total_score)
+    display_no_set_button(surface)
+    display_get_hint_button(surface)
 
+def display_cards_later(displayed_cards, image_list, surface, total_score):
+    #pygame.display.set_mode((700, 600))
+    pygame.display.set_mode((700, 750))
 
-def find_index_of_card(card, displayed_cards):
-    '''finds the index of the clicked card in the displayed_cards list'''
-    for i in range(len(displayed_cards)):
-        if(card == displayed_cards[i]):
-            return i;
+    for k,v in displayed_cards.items():
+        current_rect = surface.blit(k.image, v)
+
+    display_score(surface, total_score)
+    display_no_set_button(surface)
+    display_get_hint_button(surface)
+    return displayed_cards
+
+def get_rect_of_card(card, displayed_cards):
+    '''returns the rect of the clicked card in the displayed_cards list'''
+    rect = displayed_cards[card]
+    return rect
 
 def print_set(displayed_cards):
     '''prints a set solution'''
@@ -112,26 +124,58 @@ def print_set(displayed_cards):
             print("card in set: ", card, "\n")
 
 def display_score(surface, total_score):
-    font = pygame.font.Font(None, 30)
+    font = pygame.font.Font(None, 50)
     to_print = "score: " + str(total_score)
     text = font.render(to_print, True, [0, 0, 255])
-    text_rect = text.get_rect(center =(345, 580))
+    text_rect = text.get_rect(center =(350, 650))
     surface.blit(text, text_rect)
 
 def display_end_score(surface, total_score):
     '''displays the score at the end of the game'''
     font = pygame.font.Font(None, 100)
-    to_print = "TOTAL SCORE: " + str(total_score)
     text = font.render(to_print, True, [0, 0, 250])
     text_rect = text.get_rect(center =(350, 500))
     surface.blit(text, text_rect)
 
 def display_end_game(surface, total_score):
     '''handles the end of the game display'''
-    pygame.display.set_mode((700, 600))
+    #pygame.display.set_mode((700, 600))
+    pygame.display.set_mode((700, 750))
     game_over_rect = pygame.Rect(-75,0,350,350)
     surface.blit(pygame.image.load('/Users/adifaintuch/Desktop/set/src/gameover.jpg'), game_over_rect)
     display_end_score(surface,total_score)
+
+def display_no_set_button(surface):
+    no_set_rect = pygame.Rect(30,605,5,5)
+    no_set_image = pygame.image.load('/Users/adifaintuch/Desktop/set/src/noset.png')
+    no_set_image = pygame.transform.scale(no_set_image, (240, 100))
+    surface.blit(no_set_image, no_set_rect)
+
+def display_get_hint_button(surface):
+    get_hint_rect = pygame.Rect(430,605,5,5)
+    get_hint_image = pygame.image.load('/Users/adifaintuch/Desktop/set/src/gethint.png')
+    get_hint_image = pygame.transform.scale(get_hint_image, (240, 100))
+    surface.blit(get_hint_image, get_hint_rect)
+
+def reset_board(surface, deck, displayed_cards, image_list, total_score):
+    model.add_cards_back_to_deck(deck, displayed_cards)
+    shuffle(deck)
+    initial_cards = model.create_initial_twelve_cards(deck)
+    displayed_cards = create_displayed_cards(initial_cards)
+    model.remove_used_cards_from_deck(deck, displayed_cards.keys())
+    clicked_images = defaultdict()
+    displayed_cards = display_cards_initial(displayed_cards, image_list, surface, total_score)
+    return displayed_cards
+
+def create_displayed_cards(initial_cards):
+    '''creates the initial 12 cards for display_cards'''
+    displayed_cards_return = defaultdict()
+    for card in initial_cards:
+        displayed_cards_return[card] = pygame.Rect(0,0,0,0)
+    return displayed_cards_return
+
+
+
 
 def run():
     total_score = 0;
@@ -140,34 +184,24 @@ def run():
 
     list_of_rect = []
 
-
-    #first item is the card number (0-11),
-    #the second if a dict of card, rect, and surface
-    dict_of_displayed_cards = defaultdict()
-
     for i in range(11):
         rect_to_add = 'rect' + str(i + 1)
         list_of_rect.append(rect_to_add)
 
 
-    surface = pygame.display.set_mode((700, 600))
-
-
+    #surface = pygame.display.set_mode((700, 600))
+    surface = pygame.display.set_mode((700, 750))
 
     running = True
     waiting_for_end = False
 
     deck = model.create_deck()
-    print("DECK")
-    for i in range(len(deck)):
-        print(deck[i])
-        print()
-    print()
     shuffle(deck)
 
-    #displayed_cards is a list of card objects
-    displayed_cards = model.create_initial_twelve_cards(deck)
-    model.remove_used_cards_from_deck(deck, displayed_cards)
+    initial_cards = model.create_initial_twelve_cards(deck)
+    displayed_cards = create_displayed_cards(initial_cards)
+    print("DISPLAYED CARDS: ", displayed_cards)
+    model.remove_used_cards_from_deck(deck, displayed_cards.keys())
 
     image_list = []
 
@@ -176,12 +210,9 @@ def run():
         image_list.append(pygame.image.load(new_pathname))
 
     #a defaultdict of key = card and value = rect
-    displayed_images = defaultdict()
-
-    #a defaultdict of key = card and value = rect
     clicked_images = defaultdict()
 
-    display_cards(displayed_cards, image_list, surface, displayed_images, total_score)
+    display_cards_initial(displayed_cards, image_list, surface, total_score)
 
     clicks = 0
     set_of_removed_cards = set()
@@ -198,12 +229,9 @@ def run():
             #print_set(displayed_cards)
             if(clicks < 3):
                 solution_set = model.find_a_set(displayed_cards)
+                #solution_set = []
                 if(print_solution_set_once == False):
                     print_solution_set_once = True
-                    print("displayed_images")
-                    print(displayed_images)
-                    print("displayed cards")
-                    print(displayed_cards)
                     print("solution set")
                     print(solution_set)
                     print("size of deck", len(deck))
@@ -212,17 +240,27 @@ def run():
                     pygame.quit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     pos = pygame.mouse.get_pos()
-                    for key, value in displayed_images.items():
-                        if value.collidepoint(pos):
-                            if(key not in set_of_removed_cards):
-                                if(key not in clicked_images):
-                                    clicks += 1
-                                    clicked_images[key] = value
-                                    make_image_clicked(key, value, surface, image_list, displayed_cards)
-                                else:
-                                    clicks -= 1
-                                    make_image_unclicked(key, value, surface, image_list, displayed_cards)
-                                    del clicked_images[key]
+                    no_set_rect = pygame.Rect(30,605,240,100)
+                    get_hint_rect = pygame.Rect(430,605,240,100)
+
+                    if(no_set_rect.collidepoint(pos) and solution_set == [] and len(deck) > 0):
+                        displayed_cards = reset_board(surface, deck, displayed_cards, image_list, total_score)
+
+                    elif(get_hint_rect.collidepoint(pos)):
+                        print("====CLICKED NO SET RECT AND THERE IS A SET====")
+                    else:
+                        for key, value in displayed_cards.items():
+                            if value.collidepoint(pos):
+                                print("the value is: ", value)
+                                if(key not in set_of_removed_cards):
+                                    if(key not in clicked_images):
+                                        clicks += 1
+                                        clicked_images[key] = value
+                                        make_image_clicked(key, value, surface, image_list, displayed_cards)
+                                    else:
+                                        clicks -= 1
+                                        make_image_unclicked(key, value, surface, image_list, displayed_cards)
+                                        del clicked_images[key]
             else:
                 clicks = 0
                 is_a_set = model.check_for_set(clicked_images)
@@ -230,22 +268,19 @@ def run():
                     print_solution_set_once = False
                     print("is a set")
                     total_score += 1;
-                    list_of_index = []
+                    list_of_rect = []
                     for card in clicked_images:
-                        list_of_index.append(find_index_of_card(card, displayed_cards))
+                        list_of_rect.append(get_rect_of_card(card, displayed_cards))
                         set_of_removed_cards.add(card)
-                    print("removed cards")
-                    print(set_of_removed_cards)
+                        displayed_cards.pop(card)
                     clicked_images = defaultdict()
                     if(len(deck) != 0):
-                        model.add_three_new_cards(deck, displayed_cards, list_of_index)
-                    #else:
-                        #model.remove_three_cards(deck, displayed_cards, list_of_index)
-                    display_cards(displayed_cards, image_list, surface, displayed_images, total_score)
+                        model.add_three_new_cards(deck, displayed_cards, list_of_rect)
+                    display_cards_later(displayed_cards, image_list, surface, total_score)
                 else:
                     print("is not a set")
                     clicked_images = defaultdict()
-                    display_cards(displayed_cards, image_list, surface, displayed_images, total_score)
+                    display_cards_later(displayed_cards, image_list, surface, total_score)
 
 
 

@@ -1,9 +1,10 @@
 #model.py
+import pygame
 from random import shuffle
 from collections import namedtuple
 from itertools import combinations
 
-Card = namedtuple('Card', 'color, shape, number, shading, position')
+Card = namedtuple('Card', 'color, shape, number, shading, position, image')
 
 #Card = namedtuple('Card', 'color, shape, number, shading, x, y')
 
@@ -21,7 +22,8 @@ def create_deck():
 		for sh in shading:
 			for s in shapes:
 				for n in number:
-					new_card = Card(c, s, n, sh, card_pos)
+					image_path = pygame.image.load('/Users/adifaintuch/Desktop/set/src/card' + str(card_pos+ 1) + '.png')
+					new_card = Card(c, s, n, sh, card_pos, image_path)
 					deck.append(new_card)
 					card_pos += 1
 
@@ -34,25 +36,29 @@ def create_initial_twelve_cards(deck):
 		used_cards.append(deck[i])
 	return used_cards
 
-def add_three_new_cards(deck, displayed_cards, list_of_index):
+def add_three_new_cards(deck, displayed_cards, list_of_rect):
 	'''adds 3 new cards to the displayed_cards list and removes them from deck'''
 	for i in range(3):
-		displayed_cards[list_of_index[i]] = deck[i]
-	for j in range(3):
-		deck.remove(displayed_cards[list_of_index[j]])
-	# for j in range(3):
-	# 	deck.remove(displayed_cards[list_of_index[i]])
+		removed_elem = deck.pop(-1)
+		displayed_cards[removed_elem] = list_of_rect[i]
 
-def remove_three_cards(deck, displayed_cards, list_of_index):
+def remove_three_cards_from_(deck, displayed_cards, list_of_index):
 	'''removes 3 cards when there are no more cards left in the deck'''
 	for j in range(3):
 		deck.remove(displayed_cards[list_of_index[j]])
 
 def remove_used_cards_from_deck(deck, used_cards):
 	'''removed the used cards from the deck'''
+	print()
+	print("USED CARDS:", used_cards)
+	print()
 	for card in used_cards:
 		deck.remove(card)
 
+def add_cards_back_to_deck(deck, used_cards):
+	'''adds back the cards when the board is reshufled'''
+	for card in used_cards:
+		deck.append(card)
 
 def check_for_set(card_dict):
 	'''checks to see if a dictionary of 3 cards is a set'''
