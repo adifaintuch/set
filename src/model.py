@@ -93,7 +93,6 @@ def check_for_set_list(card_list):
 def find_a_set(displayed_cards):
 	'''returns a list with 3 cards that make a set (the first one found -
 	returns an empty list if no set is found'''
-
 	list_of_combinations = list(combinations(displayed_cards, 3))
 	for combo in list_of_combinations:
 		if(check_for_set_list(combo)):
