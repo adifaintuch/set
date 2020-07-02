@@ -49,9 +49,6 @@ def remove_three_cards_from_(deck, displayed_cards, list_of_index):
 
 def remove_used_cards_from_deck(deck, used_cards):
 	'''removed the used cards from the deck'''
-	print()
-	print("USED CARDS:", used_cards)
-	print()
 	for card in used_cards:
 		deck.remove(card)
 

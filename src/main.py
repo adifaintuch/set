@@ -200,7 +200,6 @@ def run():
 
     initial_cards = model.create_initial_twelve_cards(deck)
     displayed_cards = create_displayed_cards(initial_cards)
-    print("DISPLAYED CARDS: ", displayed_cards)
     model.remove_used_cards_from_deck(deck, displayed_cards.keys())
 
     image_list = []
@@ -232,8 +231,10 @@ def run():
                 #solution_set = []
                 if(print_solution_set_once == False):
                     print_solution_set_once = True
+                    print()
                     print("solution set")
                     print(solution_set)
+                    print()
                     print("size of deck", len(deck))
                 if event.type == pygame.QUIT:
                     running = False
@@ -266,7 +267,9 @@ def run():
                 is_a_set = model.check_for_set(clicked_images)
                 if(is_a_set):
                     print_solution_set_once = False
+                    print()
                     print("is a set")
+                    print()
                     total_score += 1;
                     list_of_rect = []
                     for card in clicked_images:
