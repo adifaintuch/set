@@ -247,6 +247,7 @@ def run():
                 display_end_game(surface, total_score)
                 running = False
                 waiting_for_end = True
+                break
             #print_set(displayed_cards)
             if(clicks < 3):
                 #print("DISPLAYED CARDS BEFORE CHECKING FOR A SET: ")
@@ -319,6 +320,7 @@ def run():
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
+            pygame.display.flip()
 
     pygame.quit()
 
