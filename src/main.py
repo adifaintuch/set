@@ -191,7 +191,13 @@ def reset_board(surface, deck, displayed_cards, image_list, total_score):
     displayed_cards_return = display_cards_initial(displayed_cards, image_list, surface, total_score, len(deck))
     return displayed_cards_return
 
-
+def click_card_in_set(surface, image_list, displayed_cards, solution_set, clicked_images):
+    '''clicks on a card in the solution set when user clicks on 'get hint' button'''
+    for k,v in displayed_cards.items():
+        if (k in solution_set and k not in clicked_images):
+            clicked_images[k] = v
+            make_image_clicked(k, v, surface, image_list, displayed_cards)
+            break
 
 
 def run():
@@ -210,7 +216,6 @@ def run():
     surface = pygame.display.set_mode((700, 750))
 
     running = True
-    waiting_for_end = False
     find_solution_set = True
 
     deck = model.create_deck()
@@ -241,20 +246,11 @@ def run():
         for event in pygame.event.get():
             if(find_solution_set):
                 solution_set = model.find_a_set(displayed_cards)
-                #solution_set = []
                 find_solution_set == False
             if(len(deck) == 0 and len(solution_set) == 0):
                 display_end_game(surface, total_score)
-                running = False
-                waiting_for_end = True
-                break
-            #print_set(displayed_cards)
+
             if(clicks < 3):
-                #print("DISPLAYED CARDS BEFORE CHECKING FOR A SET: ")
-                #print(displayed_cards)
-                #print()
-                #solution_set = model.find_a_set(displayed_cards)
-                #solution_set = []
                 if(print_solution_set_once == False):
                     print_solution_set_once = True
                     print()
@@ -273,9 +269,12 @@ def run():
                     if(no_set_rect.collidepoint(pos) and solution_set == [] and len(deck) > 0):
                         displayed_cards = reset_board(surface, deck, displayed_cards, image_list, total_score)
                         find_solution_set = True
-
-                    elif(get_hint_rect.collidepoint(pos)):
+                    elif(no_set_rect.collidepoint(pos)):
                         print("====CLICKED NO SET RECT AND THERE IS A SET====")
+                    elif(get_hint_rect.collidepoint(pos)):
+                        if(solution_set != []):
+                            clicks += 1
+                            click_card_in_set(surface, image_list, displayed_cards, solution_set, clicked_images)
                     else:
                         for key, value in displayed_cards.items():
                             if value.collidepoint(pos):
@@ -316,11 +315,6 @@ def run():
 
         pygame.display.flip()
 
-        while waiting_for_end:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-            pygame.display.flip()
 
     pygame.quit()
 
