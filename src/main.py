@@ -73,9 +73,12 @@ def create_initial_display_card_positions(displayed_cards):
     upper_left_x = 40 #plus 230 each time
     upper_left_y = 30 #plus 149 every 3 cards
 
-def display_cards_initial(displayed_cards, image_list, surface, total_score, deck_size):
+def display_cards_initial(displayed_cards, image_list, surface, total_score, deck_size, single_player):
     #pygame.display.set_mode((700, 600))
-    pygame.display.set_mode((700, 750))
+    if(single_player):
+        pygame.display.set_mode((700, 750))
+    else:
+        pygame.display.set_mode((1000, 750))
 
     upper_left_x = 40 #plus 230 each time
     upper_left_y = 30 #plus 149 every 3 cards
@@ -188,7 +191,7 @@ def reset_board(surface, deck, displayed_cards, image_list, total_score):
     displayed_cards = create_displayed_cards(initial_cards)
     model.remove_used_cards_from_deck(deck, displayed_cards.keys())
     clicked_images = defaultdict()
-    displayed_cards_return = display_cards_initial(displayed_cards, image_list, surface, total_score, len(deck))
+    displayed_cards_return = display_cards_initial(displayed_cards, image_list, surface, total_score, len(deck), single_player)
     return displayed_cards_return
 
 def click_card_in_set(surface, image_list, displayed_cards, solution_set, clicked_images):
@@ -198,6 +201,32 @@ def click_card_in_set(surface, image_list, displayed_cards, solution_set, clicke
             clicked_images[k] = v
             make_image_clicked(k, v, surface, image_list, displayed_cards)
             break
+
+def make_player_selection_screen(surface):
+    '''makes the initial screen where the user can select single or multi player'''
+    pygame.display.set_mode((700, 750))
+    single_player_rect = pygame.Rect(150,200,5,5)
+    single_player_image = pygame.image.load('/Users/adifaintuch/Desktop/set/src/singleplayer.png')
+    #no_set_image = pygame.transform.scale(no_set_image, (240, 58))
+    surface.blit(single_player_image, single_player_rect)
+
+    multi_player_rect = pygame.Rect(150,400,5,5)
+    multi_player_image = pygame.image.load('/Users/adifaintuch/Desktop/set/src/multiplayer.png')
+    #get_hint_image = pygame.transform.scale(get_hint_image, (240, 50))
+    surface.blit(multi_player_image, multi_player_rect)
+
+def display_players(surface):
+    '''displays players 1 and 2 and their scores'''
+    player1_rect = pygame.Rect(700,200,5,5)
+    player1_image = pygame.image.load('/Users/adifaintuch/Desktop/set/src/player1.png')
+    #no_set_image = pygame.transform.scale(no_set_image, (240, 58))
+    surface.blit(player1_image, player1_rect)
+
+    player2_rect = pygame.Rect(700,400,5,5)
+    player2_image = pygame.image.load('/Users/adifaintuch/Desktop/set/src/player2.png')
+    #get_hint_image = pygame.transform.scale(get_hint_image, (240, 50))
+    surface.blit(player2_image, player2_rect)
+
 
 
 def run():
@@ -213,7 +242,35 @@ def run():
 
 
     #surface = pygame.display.set_mode((700, 600))
+    initial_surface = pygame.display.set_mode((700, 750))
+
+    make_player_selection_screen(initial_surface)
+
+    single_player = False
+
+    _waiting = True
+    while(_waiting):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                _waiting = False
+                pygame.quit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                pos = pygame.mouse.get_pos()
+                single_player_rect = pygame.Rect(150,200,402,98)
+                multi_player_rect = pygame.Rect(150,400,402,98)
+                if(single_player_rect.collidepoint(pos)):
+                    sinlge_player = True
+                    _waiting = False
+                elif(multi_player_rect.collidepoint(pos)):
+                    _waiting = False
+        pygame.display.flip()
+
+
     surface = pygame.display.set_mode((700, 750))
+
+    if(single_player == False):
+        surface = pygame.display.set_mode((1000, 750))
+
 
     running = True
     find_solution_set = True
@@ -234,7 +291,7 @@ def run():
     #a defaultdict of key = card and value = rect
     clicked_images = defaultdict()
 
-    display_cards_initial(displayed_cards, image_list, surface, total_score, len(deck))
+    display_cards_initial(displayed_cards, image_list, surface, total_score, len(deck), single_player)
 
     clicks = 0
     set_of_removed_cards = set()
