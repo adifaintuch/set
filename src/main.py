@@ -5,17 +5,6 @@ Adi Faintuch
 '''
 '''
 Some thing that I need to do:
--make sure the game doesn't crash when you run out of cards in the sets
-    -simply continue without adding cards
-        -can cover the cards with a black spot
-
--make a button that the user can click if they think there is no set
-    -if there is a set, let them know
-    -otherwise, add 3 new cards to the board
--make a hint button in which the user can click and it will highlight one card
-that is part of the set
-    -will do it for each hint
-    -if they click on the highlighted card, it becomes a regularly clicked card
 
 -fill in the README
     -good link: https://thehftguy.com/2016/10/24/heres-how-to-make-a-good-github-project-for-your-resume/
@@ -28,27 +17,8 @@ from collections import defaultdict
 
 clicked_image = pygame.image.load('/Users/adifaintuch/Desktop/set/src/clicked.png')
 
-def get_card_num(card):
-    card_num = 0
-    if(card.color == 'green'):
-        card_num += 27
-    if(card.color == 'purple'):
-        card_num += 54
-    if(card.shape == 'oval'):
-        card_num += 3
-    if(card.shape == 'squiggle'):
-        card_num += 6
-    if(card.number == 2):
-        card_num += 1
-    if(card.number == 3):
-        card_num += 2
-    if(card.shading == 'striped'):
-        card_num += 9
-    if(card.shading == 'solid'):
-        card_num += 18
-    return card_num
-
 def make_image_clicked(image_key, image_value, surface, image_list, displayed_cards):
+    '''makes the image clicked'''
     new_x = image_value.x - 5
     new_y = image_value.y - 5
     new_width = image_value.width + 10
@@ -59,6 +29,7 @@ def make_image_clicked(image_key, image_value, surface, image_list, displayed_ca
     surface.blit(image_key.image, image_value)
 
 def make_image_unclicked(image_key, image_value, surface, image_list, displayed_cards):
+    '''makes the image unclicked'''
     new_x = image_value.x - 5
     new_y = image_value.y - 5
     new_width = image_value.width + 10
@@ -104,7 +75,7 @@ def create_initial_display_card_positions(displayed_cards):
     upper_left_y = 30 #plus 149 every 3 cards
 
 def display_cards_initial(displayed_cards, image_list, surface, total_score, deck_size, single_player, player1_score, player2_score):
-    #pygame.display.set_mode((700, 600))
+    '''displays the cards for the first time'''
     if(single_player):
         pygame.display.set_mode((700, 750))
         display_score_single(surface, total_score)
@@ -122,8 +93,6 @@ def display_cards_initial(displayed_cards, image_list, surface, total_score, dec
     for i in range(4):
         upper_left_x = 40
         for j in range(3):
-            #card_image = pygame.transform.scale(cards_to_display_list[current_card].image, (158, 88))
-            #current_rect = surface.blit(card_image, (upper_left_x, upper_left_y))
             current_rect = surface.blit(cards_to_display_list[current_card].image, (upper_left_x, upper_left_y))
             displayed_cards[cards_to_display_list[current_card]] = current_rect
 
@@ -137,7 +106,7 @@ def display_cards_initial(displayed_cards, image_list, surface, total_score, dec
     return displayed_cards
 
 def display_cards_later(displayed_cards, image_list, surface, total_score, deck_size, single_player, player1_score, player2_score):
-    #pygame.display.set_mode((700, 600))
+    '''displays the cards after the initial time'''
     if(single_player):
         pygame.display.set_mode((700, 750))
         display_score_single(surface, total_score)
@@ -181,7 +150,6 @@ def display_score_single(surface, total_score):
 def display_score_multi(surface, player1_score, player2_score):
     '''displays the score for multiplayer'''
     font = pygame.font.Font(None, 50)
-    #print("FONTS ARE: ", pygame.font.get_fonts())
 
     to_print1 = "player 1 score: " + str(player1_score)
     text = font.render(to_print1, True, [255, 255, 255])
@@ -201,32 +169,54 @@ def display_deck_size(surface, deck_size):
     text_rect = text.get_rect(center = (350, 723))
     surface.blit(text, text_rect)
 
-def display_end_score(surface, total_score):
-    '''displays the score at the end of the game'''
+def display_end_score_single(surface, total_score):
+    '''displays the score at the end of the game for singleplayer'''
     font = pygame.font.Font(None, 100)
     to_print = "score: " + str(total_score)
     text = font.render(to_print, True, [0, 0, 250])
     text_rect = text.get_rect(center =(350, 500))
     surface.blit(text, text_rect)
 
-def display_end_game(surface, total_score):
-    '''handles the end of the game display'''
-    #pygame.display.set_mode((700, 600))
+def display_end_score_multi(surface, player1_score, player2_score):
+    '''displays the score at the end of the game for multiplayer'''
+    font = pygame.font.Font(None, 80)
+    to_print = "P1 score: " + str(player1_score)
+    to_print += "      P2 score: " + str(player2_score)
+    text = font.render(to_print, True, [0, 0, 250])
+    text_rect = text.get_rect(center =(500, 600))
+    surface.blit(text, text_rect)
+
+def display_end_game_single(surface, total_score):
+    '''handles the end of the game display for singleplayer'''
     pygame.display.set_mode((700, 750))
-    game_over_rect = pygame.Rect(-75,0,350,350)
-    surface.blit(pygame.image.load('/Users/adifaintuch/Desktop/set/src/gameover.jpg'), game_over_rect)
-    display_end_score(surface,total_score)
+    game_over_rect = pygame.Rect(150,150,350,350)
+    surface.blit(pygame.image.load('/Users/adifaintuch/Desktop/set/src/gameover_single.png'), game_over_rect)
+    display_end_score_single(surface,total_score)
+
+def display_end_game_multi(surface, player1_score, player2_score, winner):
+    '''handles the end of the game display for multiplayer'''
+    pygame.display.set_mode((1000, 750))
+    game_over_rect = pygame.Rect(240,35,350,350)
+    surface.blit(pygame.image.load('/Users/adifaintuch/Desktop/set/src/gameover_multi.png'), game_over_rect)
+    if(winner == 'player1'):
+        player1win_rect = pygame.Rect(120,400,1310,152)
+        surface.blit(pygame.image.load('/Users/adifaintuch/Desktop/set/src/player1win.png'), player1win_rect)
+    elif(winner == 'player2'):
+        player2win_rect = pygame.Rect(120,400,1310,152)
+        surface.blit(pygame.image.load('/Users/adifaintuch/Desktop/set/src/player2win.png'), player2win_rect)
+    else:
+        tie_rect = pygame.Rect(120,400,1310,152)
+        surface.blit(pygame.image.load('/Users/adifaintuch/Desktop/set/src/tie.png'), tie_rect)
+    display_end_score_multi(surface, player1_score, player2_score)
 
 def display_no_set_button(surface):
     no_set_rect = pygame.Rect(30,600,5,5)
     no_set_image = pygame.image.load('/Users/adifaintuch/Desktop/set/src/noset.png')
-    #no_set_image = pygame.transform.scale(no_set_image, (240, 58))
     surface.blit(no_set_image, no_set_rect)
 
 def display_get_hint_button(surface):
     get_hint_rect = pygame.Rect(430,600,5,5)
     get_hint_image = pygame.image.load('/Users/adifaintuch/Desktop/set/src/gethint.png')
-    #get_hint_image = pygame.transform.scale(get_hint_image, (240, 50))
     surface.blit(get_hint_image, get_hint_rect)
 
 def create_displayed_cards(initial_cards):
@@ -236,7 +226,8 @@ def create_displayed_cards(initial_cards):
         displayed_cards_return[card] = pygame.Rect(0,0,0,0)
     return displayed_cards_return
 
-def reset_board(surface, deck, displayed_cards, image_list, total_score, player1_score, player2_score):
+def reset_board(surface, deck, displayed_cards, image_list, total_score, player1_score, player2_score, single_player):
+    '''resets the board when there is no set and player clicks 'no set' '''
     model.add_cards_back_to_deck(deck, displayed_cards)
     shuffle(deck)
     initial_cards = model.create_initial_twelve_cards(deck)
@@ -290,6 +281,8 @@ def run():
     player1_score = 0
     player2_score = 0
 
+    winner = 'None'
+
     pygame.init()
 
     list_of_rect = []
@@ -298,8 +291,6 @@ def run():
         rect_to_add = 'rect' + str(i + 1)
         list_of_rect.append(rect_to_add)
 
-
-    #surface = pygame.display.set_mode((700, 600))
     initial_surface = pygame.display.set_mode((700, 750))
 
     make_player_selection_screen(initial_surface)
@@ -318,7 +309,6 @@ def run():
                 multi_player_rect = pygame.Rect(150,400,402,98)
                 if(single_player_rect.collidepoint(pos)):
                     single_player = True
-                    print("!!SINGLE PLAYER? ", single_player)
                     _waiting = False
                 elif(multi_player_rect.collidepoint(pos)):
                     _waiting = False
@@ -327,7 +317,6 @@ def run():
 
     surface = pygame.display.set_mode((700, 750))
 
-    print("SINGLE PLAYER? ", single_player)
     if(single_player == False):
         surface = pygame.display.set_mode((1000, 750))
 
@@ -365,13 +354,19 @@ def run():
 
     while running:
         for event in pygame.event.get():
-            print("PLAYER1 CLICKED ", player1_clicked)
-            print("PLAYER2 CLICKED ", player2_clicked)
             if(find_solution_set):
                 solution_set = model.find_a_set(displayed_cards)
                 find_solution_set == False
             if(len(deck) == 0 and len(solution_set) == 0):
-                display_end_game(surface, total_score)
+                if(single_player):
+                    display_end_game_single(surface, total_score)
+                else:
+                    if(player1_score > player2_score):
+                        display_end_game_multi(surface, player1_score, player2_score, 'player1')
+                    elif(player1_score < player2_score):
+                        display_end_game_multi(surface, player1_score, player2_score, 'player2')
+                    else:
+                        display_end_game_multi(surface, player1_score, player2_score, 'tie')
 
             if((player1_clicked == False and player2_clicked == False) or clicks < 3):
                 if(print_solution_set_once == False):
@@ -392,8 +387,10 @@ def run():
                     player2_rect = pygame.Rect(675,400,316,98)
 
                     if(no_set_rect.collidepoint(pos) and solution_set == [] and len(deck) > 0):
-                        displayed_cards = reset_board(surface, deck, displayed_cards, image_list, total_score)
+                        displayed_cards = reset_board(surface, deck, displayed_cards, image_list, total_score, player1_score, player2_score, single_player)
                         find_solution_set = True
+                        player1_clicked = False
+                        player2_clicked = False
                     elif(no_set_rect.collidepoint(pos)):
                         print("====CLICKED NO SET RECT AND THERE IS A SET====")
                     elif(get_hint_rect.collidepoint(pos)):

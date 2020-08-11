@@ -6,8 +6,6 @@ from itertools import combinations
 
 Card = namedtuple('Card', 'color, shape, number, shading, position, image')
 
-#Card = namedtuple('Card', 'color, shape, number, shading, x, y')
-
 def create_deck():
 	'''creates the deck of cards and returns a list of card namedtuples'''
 	colors = ['red', 'green', 'purple']
