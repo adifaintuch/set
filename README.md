@@ -45,7 +45,7 @@
 ### When a player gets a set, they have a point added to their score:
 ![](screenshots/multiplayer-firstset.png)
 
-### Finally, when all of the cards in the deck have been used and there are no more sets, the end game screen is displayed, showing which player is the winner and how many points each player scored
+### Finally, when all of the cards in the deck have been used and there are no more sets, the end game screen is displayed, showing which player is the winner and how many points each player scored:
 ![](screenshots/multiplayer-gameover.png)
 
 
