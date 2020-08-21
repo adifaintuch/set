@@ -368,7 +368,7 @@ def run():
                     else:
                         display_end_game_multi(surface, player1_score, player2_score, 'tie')
 
-            if((player1_clicked == False and player2_clicked == False) or clicks < 3):
+            if((not single_player and (player1_clicked == False and player2_clicked == False) or clicks < 3) or (single_player and clicks < 3)):
                 if(print_solution_set_once == False):
                     print_solution_set_once = True
                     print()
@@ -417,7 +417,7 @@ def run():
                                 make_player_unclicked(675,400,316,98,surface, player1_clicked, player2_clicked)
                                 player2_clicked = False
                                 clicked_player = True
-                        if(clicked_player == False):
+                        if(clicked_player == False and clicks < 3):
                             for key, value in displayed_cards.items():
                                 if value.collidepoint(pos):
                                     if(key not in set_of_removed_cards):
