@@ -1,5 +1,6 @@
 # SET
 
+## [How To Play](http://magliery.com/Set/SetRules.html#:~:text=Players%20do%20not%20take%20turns,the%20player%20loses%20one%20point)
 
 ### When you first open the game you see a screen giving you the option to play either single or multiplayer:
 
@@ -48,5 +49,5 @@
 ### Finally, when all of the cards in the deck have been used and there are no more sets, the end game screen is displayed, showing which player is the winner and how many points each player scored:
 ![](screenshots/multiplayer-gameover.png)
 
-
+#### Disclaimer: I did not invent this game; all copyrights go to SET
 
